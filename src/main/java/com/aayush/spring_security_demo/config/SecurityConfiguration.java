@@ -16,6 +16,9 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("/admin/**").hasRole("ADMIN")                      // Only ADMIN role can access /admin/*
+                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")     // Only USER role can access /user/*
+                .antMatchers("/**").permitAll()                                 // Allow anyone to access /*
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -32,6 +35,12 @@ public class SecurityConfiguration {
                 .roles("USER")
                 .build();
 
-        return new InMemoryUserDetailsManager(user);
+        UserDetails admin = User.withDefaultPasswordEncoder()
+                .username("admin")
+                .password("adminpass")
+                .roles("ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, admin);
     }
 }

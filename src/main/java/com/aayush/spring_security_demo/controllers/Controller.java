@@ -11,4 +11,16 @@ public class Controller
     {
         return "Hello World!";
     }
+
+    @GetMapping("/user")
+    public String user()
+    {
+        return "Hello User";
+    }
+
+    @GetMapping("/admin")
+    public String admin()
+    {
+        return "Hello Admin";
+    }
 }
